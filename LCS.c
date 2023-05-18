@@ -1,52 +1,75 @@
-#include <stdio.h>
-#include <string.h>
+Kruskal
+#include<stdio.h>
+#include<stdlib.h>
 
-int max(int a, int b) {
-    return (a > b) ? a : b;
-}
+int find(int);
+int uni(int,int);
 
-void lcs(char *X, char *Y, int m, int n) {
-    int L[m+1][n+1];
-    int i, j;
-
-    // Calculate length of LCS using dynamic programming
-    for (i = 0; i <= m; i++) {
-        for (j = 0; j <= n; j++) {
-            if (i == 0 || j == 0)
-                L[i][j] = 0;
-            else if (X[i-1] == Y[j-1])
-                L[i][j] = L[i-1][j-1] + 1;
-            else
-                L[i][j] = max(L[i-1][j], L[i][j-1]);
+int parent[10];
+void main()
+{
+    int i,j,n,ne=1,a,b,u,v;
+    int min;
+    int mincost=0;
+    int parent[10],cost[10][10];
+    printf("Enter number of vertices:\n");
+    scanf("%d",&n);
+    printf("Enter adjacency matrix:\n");
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=n;j++)
+        {
+            scanf("%d",&cost[i][j]);
+            if(cost[i][j]==0)
+            {
+                cost[i][j]=999;
+            }
         }
     }
-
-    // Print LCS
-    int index = L[m][n];
-    char lcs[index+1];
-    lcs[index] = '\0';
-    i = m, j = n;
-    while (i > 0 && j > 0) {
-        if (X[i-1] == Y[j-1]) {
-            lcs[index-1] = X[i-1];
-            i--;
-            j--;
-            index--;
+    
+    while(ne<n)
+    {
+        for(i=1,min=999;i<=n;i++)
+        {
+            for(j=1;j<=n;j++)
+            {
+                if(cost[i][j]<min)
+                {
+                    min=cost[i][j];
+                    a=u=i;
+                    b=v=j;
+                }
+            }
         }
-        else if (L[i-1][j] > L[i][j-1])
-            i--;
-        else
-            j--;
+        
+        u=find(u);
+        v=find(v);
+        
+        if(uni(u,v))
+        {
+            printf("Edge %d:(%d %d) cost:%d\n",ne++,a,b,min);
+            mincost+=min;
+        }
+        cost[a][b]=cost[b][a]=999;
     }
-    printf("LCS of %s and %s is %s\n", X, Y, lcs);
+    printf("Minimum cost:%d\n",mincost);
 }
 
+int find(int i)
+{
+    while(parent[i])
+    {
+        i=parent[i];
+    }
+    return i;
+}
 
-int main() {
-    char X[] = "AGGTAB";
-    char Y[] = "GXTXAYB";
-    int m = strlen(X);
-    int n = strlen(Y);
-    lcs(X, Y, m, n);
+int uni(int i,int j)
+{
+    if(i!=j)
+    {
+        parent[j]=i;
+        return 1;
+    }
     return 0;
 }
