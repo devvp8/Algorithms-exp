@@ -1,16 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<math.h>
-int checkFrame(char t[100],char p[100],int s,int e)
-{
-    int flag=1,i,j;
-    for(i=s,j=0;i<=e;i++,j++)
-    {
-        if(t[i]!=p[j])
-        flag=0;
-    }
-    return flag;
-}
+
 void main()
 {
     char txt[] = "abcbcdabc";
@@ -31,13 +22,10 @@ void main()
         txthash=(txthash-((txt[i-strlen(pat)])*pow(10,strlen(pat)-1)))*10+txt[i];
         if(txthash==pathash)
         {
-            if(checkFrame(txt,pat,i-strlen(pat)+1,i))
-            {
-                flag=1;
                 printf("String Matched at index %d\n",i-strlen(pat)+1);
-            }
+            
         }
     }
-    if(flag==0)
+    else
     printf("String not matched");
 }
